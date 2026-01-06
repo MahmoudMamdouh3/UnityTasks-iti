@@ -537,7 +537,6 @@ MonoBehaviour:
   gravity: -9.81
   jumpHeight: 1.5
   pushPower: 2
-  dampTime: 0.01
   fpsCamera: {fileID: 1756427332}
   tpsCamera: {fileID: 1297448512}
   cameraHolder: {fileID: 1226065386}
@@ -1106,7 +1105,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -10.45, y: 0, z: 0}
   m_LocalScale: {x: 10, y: 10, z: 10}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

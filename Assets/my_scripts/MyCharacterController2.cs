@@ -3,12 +3,14 @@ using UnityEngine.InputSystem;
 
 public class MyCharacterController2 : MonoBehaviour
 {
+    Animator animator;
     [Header("Movement Settings")]
     public float moveSpeed = 5f;
     public float lookSensitivity = 15f;
     public float gravity = -9.81f;
     public float jumpHeight = 1.5f;
     public float pushPower = 2.0f; // For pushing cubes
+    public float dampTime = 0.2f;
 
     [Header("Camera References")]
     public GameObject fpsCamera;
@@ -27,6 +29,7 @@ public class MyCharacterController2 : MonoBehaviour
 
     void Awake()
     {
+        animator = GetComponentInChildren<Animator>();
         // Get the CharacterController component instead of Rigidbody
         controller = GetComponent<CharacterController>();
         controls = new PlayerControls();
@@ -39,6 +42,9 @@ public class MyCharacterController2 : MonoBehaviour
         controls.Gameplay.Look.canceled += ctx => lookInput = Vector2.zero;
 
         controls.Gameplay.SwitchCamera.performed += ctx => ToggleCamera();
+        
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void OnEnable() => controls.Gameplay.Enable();
@@ -49,6 +55,16 @@ public class MyCharacterController2 : MonoBehaviour
         // CharacterController movement usually goes in Update, not FixedUpdate
         HandleRotation();
         HandleMovement();
+        
+        Vector3 horizontalVelocity = controller.velocity;
+        
+        // 2. Ignore vertical speed (gravity/jumping) so we don't "run" while falling
+        horizontalVelocity.y = 0; 
+
+        // 4. Clamp ensures we don't go over 1.0
+        float currentSpeed = moveInput.magnitude;
+        animator.SetFloat("moveSpeed", currentSpeed, dampTime, Time.deltaTime);
+
     }
 
     void HandleMovement()
